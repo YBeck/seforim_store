@@ -42,22 +42,15 @@
                         <td><a href="<?=getLink(array_merge (['action'=>'cart', 'currentPage'=>'table', 'cart'=>""], $seforim))?>" class="btn btn-primary">Add To Cart</a></td>
                     </tr>
                 </tbody>
-                 <?php if(isset($_POST['buy'])){
-                     $baught = $seforim['sefer_name'];
-                     }
-                 endforeach ?>
+                <?php endforeach ?>
             </thead>
         </table>
     </div>
-    <?php if(isset($_POST['buy'])): ?>
-        <div class="well text-center clear">
-            <h2 class="h2 text-sucsess">Thank you for your purchase of <?=$buyName?></h2>
-        </div>
-    <?php endif ?>
     </div>
      <div>
-        <a href="<?=getLink(['offset' => $previous])?>"class="btn btn-link previous">Previous</a>
-        <a href="<?=getLink(['offset' => $next])?>"class="btn btn-link next">Next</a> 
+        <a href="<?=getLink(['page' => $page -1])?>"class="btn btn-link previous"
+        <?php if($page <1) echo "disabled"?>>Previous</a>
+        <a href="<?=getLink(['page' => $page +1])?>"class="btn btn-link next">Next</a> 
     </div> 
 </div>
 <?php include 'bottom.php'; ?>

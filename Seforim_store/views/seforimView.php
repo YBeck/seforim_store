@@ -56,8 +56,9 @@
             <?php endif; ?>
             </div>
             <div>
-                <a href="<?=getLink(['offset' => $previous])?>"class="btn btn-link previous">Previous</a>
-                <a href="<?=getLink(['offset' => $next])?>"class="btn btn-link next">Next</a> 
+                <a href="<?=getLink(['page' => $page -1])?>"class="btn btn-link previous"
+                <?php if($page <1) echo "disabled"?>>Previous</a>
+                <a href="<?=getLink(['page' => $page +1])?>"class="btn btn-link next">Next</a> 
             </div>
         </div>
         <?php
