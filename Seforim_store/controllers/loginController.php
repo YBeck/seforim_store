@@ -17,6 +17,7 @@ if(isset($_POST['loginPassword'])){
 }
 if(!isset($_POST['login']) || empty($loginName) || empty($loginPassword) || !empty($error)){
     $styles = ".error{border-color: red;}";
+    $title = "Login";
     include_once 'views/top.php';
     include 'views/loginView.php';
     include_once 'views/top.php';

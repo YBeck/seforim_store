@@ -1,4 +1,5 @@
 <?php
+$title = "Seforim";
 include 'filterController.php';
 include 'offsetController.php';
 include 'sortController.php';

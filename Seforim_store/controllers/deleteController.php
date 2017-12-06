@@ -26,6 +26,7 @@ if(isset($_POST['deleteSefer'])){
             $deleteId = $array['id'];
         }
     }
+    $title = "delete";
     include_once 'models/deleteModel.php';
     include_once 'views/deleteView.php'; 
 }

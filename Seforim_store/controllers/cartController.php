@@ -11,6 +11,7 @@ if(isset($_POST['cart'])){ //if it's coming from the home view
         //call getArray().
 }
  if(isset($_GET['cart']) || isset($_POST['cart'])){ 
+     $title = 'Cart';
     include 'views/top.php';
     include 'views/cartForm.php';
     include 'views/bottom.php';
@@ -42,6 +43,7 @@ if(isset($_POST['cart'])){ //if it's coming from the home view
         $newAmount = $_POST['editAmount'];
     }
     $styles = ".inline{display: inline;}"; 
+    $title = 'Cart';
     include_once 'views/top.php';
     include_once 'models/cartModel.php';
     include_once 'views/cartView.php';

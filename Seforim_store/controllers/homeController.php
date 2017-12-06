@@ -13,6 +13,7 @@ if(isset($_POST['sefer'])):
     endif;        
 endif;
 
+$title = "Seforim";
 include 'offsetController.php';
 include 'models/updateModel.php';
 include 'models/seforimModel.php';

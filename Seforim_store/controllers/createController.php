@@ -97,6 +97,7 @@
         || empty($address) || empty($city) || empty($state) ||empty($zip) || empty($phone)
         || empty($password) || empty($password2)){
             $styles = ".error{border-color: red;}";
+            $title = "Create Account";
             include 'views/top.php';
             include 'views/createView.php';
             include 'views/bottom.php';

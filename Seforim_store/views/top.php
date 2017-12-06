@@ -1,4 +1,6 @@
-<?php include_once 'utils/link.php'; ?>
+<?php include_once 'utils/link.php'; 
+    $title = !empty($title) ? $title : "seforim";
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,7 +9,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <link rel="stylesheet" href="/bootstrap-3.3.7/css/bootstrap.min.css">
-    <title>seforim</title>
+    <title><?= $title ?></title>
     <style>
         body{
             padding-top: 70px;

@@ -9,6 +9,7 @@ if(isset($_POST['update'])){
 }
 
 if(isset($_GET['update']) || isset($_POST['update'])){
+    $title = "Update";
     include_once 'utils/adminOnly.php';
     include_once 'models/filterModel.php';
     include_once 'views/updateView.php';
@@ -50,6 +51,7 @@ if(isset($_POST['updateForm'])){
         $array = getArray($_POST['sefer']);  
     }
     $updateId = $array['id'];
+    $title = "Update";
     include_once 'utils/adminOnly.php';
     include_once 'models/updateModel.php';
     include_once 'views/updateView.php';
@@ -62,6 +64,7 @@ if(isset($_GET['checkout']) || isset($_POST['placeOrder'])){
     $cartArray = getArray($_COOKIE['seferInfo']);
     $cart = Cart::getInstance();
     if(isset($_GET['checkout'])){
+        $title = "Checkout";
         include_once 'views/checkout.php';
     }
     if(isset($_POST['placeOrder'])){
@@ -70,6 +73,7 @@ if(isset($_GET['checkout']) || isset($_POST['placeOrder'])){
         }
         
         $discount = 0;
+        $title = "Checkout";
         include_once 'models/updateModel.php';
         include_once 'views/buyView.php'; 
     }
