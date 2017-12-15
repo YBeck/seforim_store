@@ -1,7 +1,7 @@
 <?php 
     include_once 'utils/link.php';
     include_once 'db.php';
-    $db = new db();
+    $db = new DB();
     $con = $db->createDb();
     if(!empty($id)){
         $query = "SELECT * FROM seforim WHERE id = :id";

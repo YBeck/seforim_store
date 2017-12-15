@@ -1,6 +1,6 @@
 <?php
 include_once 'db.php';
-$db = new db();
+$db = new DB();
 $con = $db->createDb();
 if (session_id() == "")session_start();
 $id = $_SESSION['customer']['id'];

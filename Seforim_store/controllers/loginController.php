@@ -23,7 +23,7 @@ if(!isset($_POST['login']) || empty($loginName) || empty($loginPassword) || !emp
     include_once 'views/top.php';
 }else{
     include_once 'db.php';
-    $db = new db();
+    $db = new DB();
     $con = $db->createDb();
     include 'models/loginModel.php';
 }

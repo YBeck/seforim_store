@@ -1,6 +1,6 @@
 <?php 
 include_once 'db.php';
-    $db = new db();
+    $db = new DB();
     $con = $db->createDb();
 try{
     $query = "SELECT * FROM categories";

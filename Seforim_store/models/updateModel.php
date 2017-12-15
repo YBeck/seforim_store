@@ -1,6 +1,6 @@
 <?php
     require_once 'db.php';
-    $db = new db();
+    $db = new DB();
     $con = $db->createDb();
 
     if(isset($_POST['updateForm'])){

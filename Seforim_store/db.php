@@ -10,7 +10,7 @@
 //     die("Something went wrong " . $e->getMessage());
 // }
 
-class db {
+class DB {
     private $cs;
     private $user;
     private $password;

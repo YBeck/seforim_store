@@ -19,6 +19,9 @@
             background-repeat: no-repeat;
             background-size: cover; */
         }
+        #startPrice:parent{
+            display: none;
+        }
 
         <?php if (!empty($styles)) echo $styles ?>
     </style>

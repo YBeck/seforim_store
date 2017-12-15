@@ -3,7 +3,8 @@
 if(isset($_GET['logout'])){
         unset($_SESSION['customer']);
     }else{
-        $query = "SELECT c.id, c.first_name, c.last_name, up.user_name, up.password, up.admin
+        $query = "SELECT c.id, c.first_name, c.last_name, up.user_name,
+        c.email, up.password, up.admin
         FROM customers c
         JOIN userPassword up ON up.cust_id = c.id WHERE up.user_name = :name";
         //$query = "SELECT id, first_name, last_name, user_name, password, admin FROM customers WHERE user_name = :name";
@@ -22,7 +23,8 @@ if(isset($_GET['logout'])){
             if(empty($error)){
                 session_start();
                 $_SESSION['customer'] = ['id' => $values['id'], 'f_name' => $values['first_name'], 
-                    'l_name' => $values['last_name'], 'admin' => $values['admin']];
+                    'l_name' => $values['last_name'], 'user_name' => $values['user_name'],
+                    'email' => $values['email'], 'admin' => $values['admin']];
                 header("Location:index.php?action=home");
             }else{
                 include 'controllers/loginController.php';

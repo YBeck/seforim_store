@@ -103,7 +103,7 @@
             include 'views/bottom.php';
         }else{
             include 'db.php';
-            $db = new db();
+            $db = new DB();
             $con = $db->createDb();
             include 'models/createModel.php';
             header("Location:index.php?action=home");

@@ -15,6 +15,9 @@
     include_once 'utils/link.php';
 ?>
 <div class="jumbotron"><h1 class="h1">Seforim Store</h1></div>
+<div class="text-left">
+    <a href="index.php?action=sell">Have a Sefer to sell?</a>
+</div>
     <div class="row">
         <?php include_once 'views/sortView.php'; ?>
     </div>
