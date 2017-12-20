@@ -41,7 +41,8 @@
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav">
             <li><a href="<?=getLink(['action' => 'home', 'viewCart' => null, 'update' => null])?>">Home</a></li>
-            <li><a href="<?=getLink(['action' => 'table', 'viewCart' => null,'viewCart' => null])?>">Table</a></li>
+            <li><a href="<?=getLink(['action' => 'table', 'viewCart' => null,'update' => null])?>">Table</a></li>
+            <li><a href="<?=getLink(['action' => 'auctionItems', 'viewCart' => null,'update' => null])?>">Auction</a></li>
             <?php if (session_id() == "")session_start();
             if(isset($_SESSION['customer']) && $_SESSION['customer']['admin'] == 1):?>
                 <li><a href="<?=getLink(['action' => 'add'])?>">Add Sefer</a></li>

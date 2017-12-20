@@ -3,7 +3,8 @@
     $con = $db->createDb();
 
     try{
-        $query = 'SELECT id, productName, mainImage FROM createauction';
+        $query = 'SELECT id, productName, mainImage FROM createauction
+         WHERE endDay > startDay';
         $statement = $con->query($query);
         $items = $statement->fetchAll(PDO::FETCH_ASSOC);
         //print_r($items);

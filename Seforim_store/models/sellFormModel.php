@@ -8,8 +8,6 @@
         //print_r($_SERVER);
         // seller info to store in database.
         $sellerId = $_SESSION['customer']['id'];
-        $userName = $_SESSION['customer']['user_name'];
-        $email = $_SESSION['customer']['email'];
         $errors = [];
 
         function getPost($param){
@@ -45,16 +43,14 @@
 
         //echo json_encode($temp);
         try{
-            $insert = "INSERT INTO createAuction (sellerId, userName,
-             email, productName, title, mainImage, subImg1, subImg2, subImg3, 
+            $insert = "INSERT INTO createAuction (sellerId, productName, title, 
+            mainImage, subImg1, subImg2, subImg3, 
              productCondition, description, startPrice, days, startDay, endDay)
              VALUES (:sellerId, :userName, :email, :productName,
                 :title, :mainImage, :subImg1, :subImg2, :subImg3, :condition, :description,
-                :startPrice, :days, NOW(), :endDay)";
+                :startPrice, :days, NOW(), DATE_ADD(NOW(), INTERVAL :endDay DAY))";
                 $prepare = $con->prepare($insert);
                 $prepare->bindvalue('sellerId', (int)$sellerId, PDO::PARAM_INT);
-                $prepare->bindvalue('userName', $userName);
-                $prepare->bindvalue('email', $email);
                 $prepare->bindvalue('productName', $productName);
                 $prepare->bindvalue('title', $title);
                 $prepare->bindvalue('mainImage', $mainImg);
@@ -65,7 +61,7 @@
                 $prepare->bindvalue('description', $description);
                 $prepare->bindvalue('startPrice', (int)$startPrice, PDO::PARAM_INT);
                 $prepare->bindvalue('days', (int)$days, PDO::PARAM_INT);
-                $prepare->bindvalue('endDay', 'DATE_ADD(NOW(), INTERVAL ' . $days . ' DAY');
+                $prepare->bindvalue('endDay', (int)$days, PDO::PARAM_INT);
                 $rows = $prepare->execute();
                 echo $rows . ' rows entered';
 

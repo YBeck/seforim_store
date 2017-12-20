@@ -13,7 +13,8 @@
         <div class="row">
             <div class="col-sm-7">
                 <p>Item condition: <span id="item-condition"></span></p>
-                <p>Time left: 5:43</p>
+                <p>Time left: <span id="days"></span><span id="hour"></span><span id="min"></span>
+                    <span id="sec"></span></p>
                 <section class="well-lg" id="bid-info">
                     <p class="text-left">Current bid: <strong id="current-bid">$22.50</strong>
                     <span id="bid-span">There are currently <span id="bid-amouny">5</span> bids</span></p>

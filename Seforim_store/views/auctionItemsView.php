@@ -1,5 +1,9 @@
 
 <div class="container">
+<div class="jumbotron text-center"><h1>Auction Items</h1></div>
+    <div class="text-left">
+        <a href="index.php?action=sell" class="text-success">Have a Sefer to sell?</a>
+    </div>
     <div class="table-responsive">
         <table class="table table-hover table-striped">
             <thead>
