@@ -16,13 +16,13 @@
                 <p>Time left: <span id="days"></span><span id="hour"></span><span id="min"></span>
                     <span id="sec"></span></p>
                 <section class="well-lg" id="bid-info">
-                    <p class="text-left">Current bid: <strong id="current-bid">$22.50</strong>
-                    <span id="bid-span">There are currently <span id="bid-amouny">5</span> bids</span></p>
-                    <form action="" class="form-inline">
+                    <p class="text-left">Current bid: <strong id="current-bid"></strong>
+                    <span id="bid-span">There are currently <span id="bid-amount"></span> bids</span></p>
+                    <form action="" class="form-inline" id="bid-form">
                         <input type="number" step="any" id="bid-entered">
-                        <button type="button" class="btn btn-primary btn-xs">Place bid</button>
+                        <button type="submit" class="btn btn-primary btn-xs">Place bid</button>
                     </form>
-                    <p>Enter an amount of <span id="place-amount">$21.00</span> or more</p>
+                    <p>Enter an amount of <span id="place-amount"></span> or more</p>
                 </section>
                 <div class="row" id="thumb-div">
                     <div class="col-sm-4">
@@ -50,3 +50,23 @@
         </div><!-- end of inner row -->
     </div><!-- end of title col -->
 </div><!-- end of outer row -->
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h3 class="modal-title text-danger">Error</h3>
+      </div>
+      <div class="modal-body">
+        <p id="errorMsg"></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>

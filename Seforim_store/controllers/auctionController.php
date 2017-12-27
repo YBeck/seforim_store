@@ -8,7 +8,8 @@
         #main-img{height: 100%;}
         #seller-info{border: 1px solid blueviolet;
         background: aliceblue;}
-        .img-thumbnail{height: 97px !important; width: 130px !important;}';
+        .img-thumbnail{height: 97px !important; width: 130px !important;}
+        #myModal{display:none;}';
         
     include 'views/top.php';
     include 'views/auctionView.php';

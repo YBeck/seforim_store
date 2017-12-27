@@ -4,7 +4,7 @@
 
     try{
         $query = 'SELECT id, productName, mainImage FROM createauction
-         WHERE endDay > startDay';
+         WHERE endDay > NOW()';
         $statement = $con->query($query);
         $items = $statement->fetchAll(PDO::FETCH_ASSOC);
         //print_r($items);

@@ -1,16 +1,19 @@
 /* global $ */
 (function () {
     "use strict";
+    //var item;
     var mainImg = $('#main-img');
     var firstThumbnail = $('#first-thumbnail');
     var seconThumbnail = $('#second-thumbnail');
     var thirdThumbnail = $('#third-thumbnail');
+    var currentBid = $('#current-bid');
+    var curBidAmount; // variable to save current bid amount from the cookie
+    var numOfBids = $('#bid-amount');
+    var bidForm = $('#bid-form');
     var itemClick = $('#item-link'); //the link from auctionItems to diplay the item
     // to set the countdown clock
     var days = $('#days');
-   
     var hours = $('#hour');
-    console.log(hours);
     var minutes = $('#min');
     var seconds = $('#sec');
 
@@ -27,16 +30,26 @@
     itemClick.click(function (e) {
         if (e.target.nodeName === 'BUTTON') { //only if the button is clicked not the div
             //console.log($(e.target)[0].attributes[1].nodeValue);
-            var id = $(e.target)[0].attributes[1].nodeValue; //get the button id
-            
-            $.get('models/auctionViewModel.php?id=' + id, function (res) {
-                // console.log(res);
-               // $.cookie.json = true; //instead of  JSON.stringify()
-                $.cookie('item', res); //store json data in cookie to be used after re-direct
-            });
-           $(location).attr('href', 'index.php?action=auction');//display auction page
+            var id = $(e.target)[0].attributes[1].nodeValue; //get the button id 
+            $.cookie('item', id); //store json data in cookie to be used after re-direct
+            $(location).attr('href', 'index.php?action=auction');//display auction page
         }    
     });
+    // itemClick.click(function (e) {
+    //     if (e.target.nodeName === 'BUTTON') { //only if the button is clicked not the div
+    //         //console.log($(e.target)[0].attributes[1].nodeValue);
+    //         var id = $(e.target)[0].attributes[1].nodeValue; //get the button id
+            
+    //         $.get('models/auctionViewModel.php?id=' + id, function (res) {
+    //              console.log(res);
+    //            // $.cookie.json = true; //instead of  JSON.stringify()
+    //             if (res) {
+    //                 $.cookie('item', res); //store json data in cookie to be used after re-direct
+    //             }   
+    //         });
+    //         $(location).attr('href', 'index.php?action=auction');//display auction page
+    //     }    
+    // });
 
     // function to pad a element
     function padLeft(paddee, padder, length) {
@@ -94,8 +107,28 @@
 
     }
 
-    if ($.cookie('item')) {
-        var item = JSON.parse($.cookie('item'));         
+    //function to parse the cookie to json
+    function getCookie(cookie) {
+        if($.cookie(cookie)) {
+            return $.cookie(cookie);
+        }    
+    }
+
+    //set the page 
+    function getJson(){
+        $.getJSON('models/auctionViewModel.php', {
+            id: getCookie('item')
+        }, function (res) {
+            //item = getCookie('item');
+           // console.log(res);
+            setAuctionPage(res);
+        });
+    }
+
+    function setAuctionPage(item){
+        //var item = getCookie('item');
+        curBidAmount = item[0].curBid ? parseFloat(item[0].curBid) :
+            parseFloat(item[0].startPrice);
         $('#product-title').text(item[0].title);
         mainImg.attr('src', item[0].mainImage);
         firstThumbnail.attr('src', item[0].subImg1);
@@ -105,10 +138,17 @@
         $('#product-description').text(item[0].description);
         $('#seller-name').text(item[0].user_name);
         $('#seller-email').text(item[0].email);
+        $('#place-amount').text('$' + (curBidAmount + 1) + '.00');
+        numOfBids.text(item[0].bidsAmount);
+        currentBid.text(curBidAmount + '.00');
         setInterval(function () {
             setTimer(item[0].end_day);
         }, 1000);
-        //console.log(item);
+       // console.log(item);
+    }
+
+    if (getCookie('item')) { 
+        getJson();
     }
 
     // the thumb image that is moused over will become the main image
@@ -130,6 +170,28 @@
         var firstThumbnailSrc = thirdThumbnail.attr('src');
         thirdThumbnail.attr('src', mainImgSrc);
         mainImg.attr('src', firstThumbnailSrc);
+    });
+
+    bidForm.on('submit', function (event) {
+        //console.log(bidForm[0][0].value);
+        //console.log('current bid', curBidAmount);
+        $.post('models/bidModel.php', {
+            productId: getCookie('item'),
+            amountToBid: curBidAmount +1,
+            amount: bidForm.find('input').val()
+        }, function (result) {
+            if (result) { //if we got back a error
+                var error = JSON.parse(result);
+                $('#errorMsg').text(error.error);
+               // $('#myModal').modal(options);
+                $('#myModal').modal('toggle'); //show error message
+                //console.log(error.error);
+            }    
+            getJson();
+        }).fail(function () {
+            console.error('bid failed');
+        });
+        event.preventDefault();
     });
 
 }()); 
