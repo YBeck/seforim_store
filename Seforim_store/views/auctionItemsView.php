@@ -11,15 +11,19 @@
                 <th class="text-center">Current Price</th>
                 <th class="text-center">Image</th>
             </thead>
-            <tbody id="item-link">
+            <tbody id="table">
                 <?php foreach ($items as $item) : ?>
                     <tr><td><button class="btn btn-link" id=<?=$item['id'] ?>>
                         <?=$item['productName']?></button></td>
-                    <td>$20.99</td>
+                    <td><?=$item['cur_bid']?></td>
                     <td><img src=<?=$item['mainImage']?> class="thumbnail" 
                         id="table-img"></td></tr>
                 <?php endforeach ?>
             </tbody>
         </table>
+    </div>
+    <div id="pager">
+        <button class="btn btn-primary" id="previous">Previous page</button>
+        <button class="btn btn-primary" id="next">Next page</button>
     </div>
 </div>

@@ -1,14 +1,19 @@
 <?php
 
-// if(isset($_SERVER['HTTP_X_REQUESTED_WITH']) && 
-// $_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest'){
+if(isset($_SERVER['HTTP_X_REQUESTED_WITH']) && 
+$_SERVER['HTTP_X_REQUESTED_WITH'] === 'XMLHttpRequest'){
     if (session_id() == "")session_start();
-    $cust_id = $_SESSION['customer']['id'];
+    $cust_id = !empty($_SESSION['customer']['id']) ? $_SESSION['customer']['id']: "";
     $productId = "";
     $bidAmount = "";
     $amountToBid = "";
     $currentMax = "";
     $errors['error'] = []; //declear an array with key error
+
+    //only a customer thats loged in can bid
+    if(empty($cust_id)){
+        $errors['error'][] = "Login required to place a bid";
+    }
     if(isset($_POST['productId'])){
         if(!empty($_POST['productId']) && is_numeric($_POST['productId'])){
             $productId = $_POST['productId'];
@@ -48,11 +53,10 @@
         }
 
         try{
-            $insert = "INSERT INTO bid (cust_id, bid_time, cur_bid, max_bid, item_id) 
-                VALUES (:cust, NOW(), :theBid, :max, :itemId)";
+            $insert = "INSERT INTO bid (cust_id, bid_time,max_bid, item_id) 
+                VALUES (:cust, NOW(),:max, :itemId)";
             $statement = $con->prepare($insert);
             $statement->bindvalue('cust', (int)$cust_id , PDO::PARAM_INT);
-            $statement->bindvalue('theBid', $amountToBid);
             $statement->bindvalue('max', $bidAmount);
             $statement->bindvalue('itemId', (int)$productId , PDO::PARAM_INT);
             $statement->execute();
@@ -68,24 +72,14 @@
                 $statement2->bindvalue('bid', $amountToBid);
             }else if($bidAmount > $currentMax){
                 $statement2->bindvalue('bid', $currentMax +1);
+            }else if($bidAmount == $currentMax){
+                $statement2->bindvalue('bid', $bidAmount);
             }else{
                 $statement2->bindvalue('bid', $bidAmount +1);
             }
             $statement2->execute();
         }catch(PDOException $e){
             echo 'Something went wrong with insert into allbids '. $e;
-        }
-        
-        try{
-            $update = "UPDATE bid SET cur_bid = :curBid 
-                WHERE item_id = :itemId 
-                ORDER BY max_bid DESC LIMIT 1";
-            $statement3 = $con->prepare($update);
-            $statement3->bindvalue('curBid', $bidAmount +1);
-            $statement3->bindvalue('itemId', (int)$productId , PDO::PARAM_INT);
-            $statement3->execute();
-        }catch(PDOException $e){
-            echo 'Something went wrong with update '. $e;
         }
     }else {
        echo json_encode($errors);
@@ -94,5 +88,5 @@
         exit();
     }
    // echo json_encode($results);
-//}
+}
 ?>

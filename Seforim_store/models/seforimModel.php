@@ -15,7 +15,7 @@
             $categories = []; // we can always merge it even if it's empty
         } 
         if(empty($offset)){ 
-            $offset = 0; // additionally offset by 0
+            $offset = 0; // initially offset by 0
         } 
         
         try{

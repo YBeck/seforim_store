@@ -10,24 +10,82 @@
     var curBidAmount; // variable to save current bid amount from the cookie
     var numOfBids = $('#bid-amount');
     var bidForm = $('#bid-form');
-    var itemClick = $('#item-link'); //the link from auctionItems to diplay the item
-    // to set the countdown clock
-    var days = $('#days');
-    var hours = $('#hour');
-    var minutes = $('#min');
-    var seconds = $('#sec');
+    var table = $('#table'); //the link from auctionItems to diplay the item
+    var pageIndex = 1; // keeps track of page number
+    var amountOfItems; // how many items in the database
+    var amountPerPage = 4;
+    console.log(amountOfItems);
+
+    // get the amount of items in the database
+    $.getJSON('models/amountOfItems.php', function (items) {
+        amountOfItems = items;
+        var pages = Math.ceil(amountOfItems / amountPerPage); // max amount of pages
+        nextPage(pages);
+    });
+
+    // load the next page on auction items
+    function nextPage(pages) {
+        $('#pager').click(function (e) {
+            console.log('pages ', pages);
+            if (e.target.innerHTML === 'Next page') {
+                if (++pageIndex > pages) {
+                    pageIndex = 1;
+                    //console.log('page index ', pageIndex);
+                }
+            } else if (e.target.innerHTML === 'Previous page') {
+                if (--pageIndex <= 0) {
+                    pageIndex = 1;
+                    console.log('page index ', pageIndex);
+                }
+            }
+            $.getJSON('models/auctionItemsModel.php', { auctionPage: pageIndex },
+                function (content) {
+                    var reloadTable = '';
+                    content.forEach(function (e) {
+                        reloadTable += '<tr><td><button class="btn btn-link" id="' + e.id + '">' +
+                            e.productName + '</button></td>' +
+                            '<td>' + e.cur_bid + '</td>' +
+                            '<td><img src="' + e.mainImage + '"class="thumbnail" ' +
+                            'id = "table-img" ></td></tr >';
+                        //console.log(e);
+                    });
+                    table.html(reloadTable);
+                    //console.log(content);
+                });
+        });
+    }    
 
       // submit the sell form with ajax
       $("#sell-form").on("submit", function (event) {
           event.preventDefault();
-          $.post('models/sellFormModel.php', $(this).serialize(), function () {
-              //console.log(ret);
-          }).fail(function (jqxhr) {
-              console.log("Error: " + jqxhr.responseText);
-          });
+            $.ajax({
+                url: 'models/sellFormModel.php',
+                type: 'POST',
+                data: new FormData(this),
+                processData: false,
+                contentType: false,
+                success: function (ret) {
+                    if (ret) { //if we got back a error
+                        //console.log(typeof ret);
+                        var error = JSON.parse(ret);
+                        $.each(error.error, function (index, err) {
+                            $('#formErrorMsg').append( //append to the modal
+                                '<li class="list-group-item-danger text-left">' + err + '</li>'
+                            );
+                        });
+                        $('#formModal').modal('toggle'); //show error message
+                    } else {
+                        $(location).attr('href', 'index.php?action=auctionItems'); //redirect to auction items page
+                    }    
+                },
+                error: function (jqxhr) {
+                    console.log("Error: " + jqxhr.responseText);
+                }
+            });
+      
       });
 
-    itemClick.click(function (e) {
+    table.click(function (e) {
         if (e.target.nodeName === 'BUTTON') { //only if the button is clicked not the div
             //console.log($(e.target)[0].attributes[1].nodeValue);
             var id = $(e.target)[0].attributes[1].nodeValue; //get the button id 
@@ -35,76 +93,8 @@
             $(location).attr('href', 'index.php?action=auction');//display auction page
         }    
     });
-    // itemClick.click(function (e) {
-    //     if (e.target.nodeName === 'BUTTON') { //only if the button is clicked not the div
-    //         //console.log($(e.target)[0].attributes[1].nodeValue);
-    //         var id = $(e.target)[0].attributes[1].nodeValue; //get the button id
-            
-    //         $.get('models/auctionViewModel.php?id=' + id, function (res) {
-    //              console.log(res);
-    //            // $.cookie.json = true; //instead of  JSON.stringify()
-    //             if (res) {
-    //                 $.cookie('item', res); //store json data in cookie to be used after re-direct
-    //             }   
-    //         });
-    //         $(location).attr('href', 'index.php?action=auction');//display auction page
-    //     }    
-    // });
-
-    // function to pad a element
-    function padLeft(paddee, padder, length) {
-        var result = paddee.toString();
-        while (result.length < length) {
-            result = padder + result;
-        }
-        return result;
-    }
-
-    //function to set the countdown clock to always display 2 digits
-    function ensureTwoDigits(number) {
-        return padLeft(number, '0', 2);
-    }
-
-    //function to display the days left
-    function setDays(day) {
-        if (day > 1) {
-            return day + ' days ';
-        } else if (day === 1) {
-            return day + ' day ';
-        }
-        return 'Today ';
-    }
-
-    function setTimer(endtime) {
-        var endDay = endtime;
-        //console.log('endDay ', endDay);
-        var now = Math.floor(new Date() / 1000);
-        //console.log('current time ', now);
-        var sec = Math.floor(endDay - now);
-        // console.log('seconds ', sec);
-        var min = Math.floor(sec / 60);
-        //console.log('minutes ', min);
-        var hour = Math.floor(min / 60);
-        //console.log('hour ', hour);
-        var day = Math.floor(hour / 24);
-        //console.log('day ', day);
-        if (sec > 59) {
-            sec = sec % 60;
-        }
-
-        if (min > 59) {
-            min = min % 60;
-        }
-
-        if (hour > 23) {
-            hour = hour % 24;
-        }
-        //console.log('day: ', day, 'hour ', hour, 'min: ', min, 'sec ', sec);
-        days.text(setDays(day));
-        hours.text(ensureTwoDigits(hour) + 'h ');
-        minutes.text(ensureTwoDigits(min) + 'm ');
-        seconds.text(ensureTwoDigits(sec) + 's');
-
+    function formatDecimal(num) {
+        return '$' + parseFloat(Math.round(num * 100) / 100).toFixed(2);
     }
 
     //function to parse the cookie to json
@@ -119,7 +109,6 @@
         $.getJSON('models/auctionViewModel.php', {
             id: getCookie('item')
         }, function (res) {
-            //item = getCookie('item');
            // console.log(res);
             setAuctionPage(res);
         });
@@ -127,8 +116,7 @@
 
     function setAuctionPage(item){
         //var item = getCookie('item');
-        curBidAmount = item[0].curBid ? parseFloat(item[0].curBid) :
-            parseFloat(item[0].startPrice);
+        curBidAmount = parseFloat(item[0].curBid); 
         $('#product-title').text(item[0].title);
         mainImg.attr('src', item[0].mainImage);
         firstThumbnail.attr('src', item[0].subImg1);
@@ -138,12 +126,18 @@
         $('#product-description').text(item[0].description);
         $('#seller-name').text(item[0].user_name);
         $('#seller-email').text(item[0].email);
-        $('#place-amount').text('$' + (curBidAmount + 1) + '.00');
+        $('#place-amount').text(formatDecimal(curBidAmount + 1));
         numOfBids.text(item[0].bidsAmount);
-        currentBid.text(curBidAmount + '.00');
-        setInterval(function () {
-            setTimer(item[0].end_day);
-        }, 1000);
+        currentBid.text(formatDecimal(curBidAmount));
+        var now = Math.floor(new Date() / 1000);
+        var sec = Math.floor((item[0].end_day) - now);
+        $('#timerCircles').attr('data-timer', sec).TimeCircles({
+            count_past_zero: false
+        }).addListener(function (unit, value, total) {
+            if (total <= 0) { 
+                $.post('models/emailModel.php', { item: item[0].productId });
+            }
+        });
        // console.log(item);
     }
 
@@ -182,12 +176,15 @@
         }, function (result) {
             if (result) { //if we got back a error
                 var error = JSON.parse(result);
-                $('#errorMsg').text(error.error);
-               // $('#myModal').modal(options);
+                $.each(error.error, function (index, err) {
+                    $('#errorMsg').append( //append to the modal
+                        '<li class="list-group-item-danger text-left">' + err + '</li>'
+                    );
+                });
                 $('#myModal').modal('toggle'); //show error message
-                //console.log(error.error);
+            } else {
+                getJson();
             }    
-            getJson();
         }).fail(function () {
             console.error('bid failed');
         });

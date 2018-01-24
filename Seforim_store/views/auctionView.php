@@ -13,8 +13,8 @@
         <div class="row">
             <div class="col-sm-7">
                 <p>Item condition: <span id="item-condition"></span></p>
-                <p>Time left: <span id="days"></span><span id="hour"></span><span id="min"></span>
-                    <span id="sec"></span></p>
+                <h3 class="text-success">Time left:</h3>
+                <div id="timerCircles"></div>
                 <section class="well-lg" id="bid-info">
                     <p class="text-left">Current bid: <strong id="current-bid"></strong>
                     <span id="bid-span">There are currently <span id="bid-amount"></span> bids</span></p>
@@ -61,7 +61,7 @@
         <h3 class="modal-title text-danger">Error</h3>
       </div>
       <div class="modal-body">
-        <p id="errorMsg"></p>
+        <ul id="errorMsg"></ul>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

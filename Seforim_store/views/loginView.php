@@ -7,7 +7,7 @@
 <?php endif?>
 <form class="form-inline text-center" action="index.php?action=login" method="post">
     <div class="form-group">
-        <label for="loginName">Name:</label>
+        <label for="loginName">User Name:</label>
         <input type="text" class="form-control"  id="loginName" name="loginName" value="<?=$loginName?>">
     </div>
     <div class="form-group">
@@ -16,3 +16,6 @@
     </div>
     <button type="submit" class="btn btn-primary" name="login">Login</button> 
 </form>
+<div>
+    <p>Not a member? click <a href="index.php?action=create">here</a></p>
+</div>

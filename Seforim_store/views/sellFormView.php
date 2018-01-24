@@ -4,10 +4,26 @@ if(!isset($_SESSION['customer'])){ //if not loged in
     header("Location:index.php?action=login");
 }
 ?>
-
+<div id="formModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h3 class="modal-title text-danger">Error</h3>
+            </div>
+            <div class="modal-body">
+            <ul id="formErrorMsg"></ul>
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="jumbotron text-center"><h1>Sell Online Form</h1></div>
 <div class="form col-sm-10 text-center">
-<form class="form-horizontal" id="sell-form" method="post">
+<form class="form-horizontal" id="sell-form" method="post" enctype="multipart/form-data">
     <div class="form-group text-left">
         <label class="form-label" for="productName">What product do you want to sell?</label>
         <input type="text" class="form-control" id="productName" name="productName" required>
@@ -17,19 +33,8 @@ if(!isset($_SESSION['customer'])){ //if not loged in
         <input type="text" class="form-control" id="title" name="title" required>
     </div>
     <div class="form-group text-left">
-        <label for="mainImg">Enter a URLfor the main image you want to display</label>
-        <input type="text" class="form-control" id="mainImg" name="mainImg" required>
-    </div>
-
-    <div class="form-group text-left">
-        <label for="subImg">Enter 3 URL's for the sub images you want to display</label>
-        <input type="text" class="form-control subImg" id="subImg1" name="subImg1" required>
-    </div>
-    <div class="form-group text-left">
-        <input type="text" class="form-control subImg" id="subImg2" name="subImg2" required>
-    </div>
-    <div class="form-group text-left">
-        <input type="text" class="form-control subImg" id="subImg3" name="subImg3" required>
+        <label for="items_pic">Coose 4 images (.jpg, .jpeg, .png, .pjpeg) to display</label>
+        <input type="file" id="items_pic" name="items_pic[]" accept=".jpg, .jpeg, .png" multiple>
     </div>
     <div class="text-left form-group"> 
         <span><strong>Is this item new or used?</strong></span> 
@@ -45,8 +50,8 @@ if(!isset($_SESSION['customer'])){ //if not loged in
         <input type="number" step="any" class="form-control subImg" id="startPrice" name="startPrice" required>
     </div>
     <div class="form-group text-left">
-        <label for="days">Enter how many days should the product be up for auction</label>
-        <input type="number" step="1" class="form-control subImg" id="days" name="days" required>
+        <label for="days">Enter how many days should the product be up for auction (enter amount between 1 and 10 days)</label>
+        <input type="number" step="1" min="1" max="10" class="form-control subImg" id="days" name="days" required>
     </div>
     <button type="submit" class="btn btn-primary" id="submit">Submit</button>
 </form>
