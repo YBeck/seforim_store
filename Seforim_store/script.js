@@ -1,7 +1,7 @@
 /* global $ */
 (function () {
     "use strict";
-    //var item;
+    // sets variables for the 4 images
     var mainImg = $('#main-img');
     var firstThumbnail = $('#first-thumbnail');
     var seconThumbnail = $('#second-thumbnail');
@@ -9,23 +9,39 @@
     var currentBid = $('#current-bid');
     var curBidAmount; // variable to save current bid amount from the cookie
     var numOfBids = $('#bid-amount');
-    var bidForm = $('#bid-form');
+    var bidForm = $('#bid-form'); // form to submit a bid
     var table = $('#table'); //the link from auctionItems to diplay the item
     var pageIndex = 1; // keeps track of page number
-    var amountOfItems; // how many items in the database
     var amountPerPage = 4;
-    console.log(amountOfItems);
+    var amountOfItems;
+    var pages;
+
+    // how many items in the database
+
+    getAmountOfItems(function (amount) {
+        // console.log('in function "amount" ', amount);
+        // console.log(amountOfItems, ' "amountOfItems" in of function');
+        amountOfItems = amount;
+        pages = Math.ceil(amountOfItems / amountPerPage); // max amount of pages
+    });
+    // var amountOfItems = getAmountOfItems(function (amount) {
+    //     console.log('in function "amount" ', amount);
+    //     return amount;
+    // });
+     
+    // console.log(amountOfItems, ' "amountOfItems" out of function');
+     
 
     // get the amount of items in the database
-    $.getJSON('models/amountOfItems.php', function (items) {
-        amountOfItems = items;
-        var pages = Math.ceil(amountOfItems / amountPerPage); // max amount of pages
-        nextPage(pages);
-    });
+    function getAmountOfItems(callback) {
+        $.getJSON('models/amountOfItems.php', function (items) {
+            callback(items);
+        });
+    } 
 
     // load the next page on auction items
-    function nextPage(pages) {
-        $('#pager').click(function (e) {
+    $('#pager').click(function (e) {
+            console.log(amountOfItems, ' in click');
             console.log('pages ', pages);
             if (e.target.innerHTML === 'Next page') {
                 if (++pageIndex > pages) {
@@ -52,8 +68,7 @@
                     table.html(reloadTable);
                     //console.log(content);
                 });
-        });
-    }    
+        });   
 
       // submit the sell form with ajax
       $("#sell-form").on("submit", function (event) {
@@ -115,7 +130,6 @@
     }
 
     function setAuctionPage(item){
-        //var item = getCookie('item');
         curBidAmount = parseFloat(item[0].curBid); 
         $('#product-title').text(item[0].title);
         mainImg.attr('src', item[0].mainImage);
